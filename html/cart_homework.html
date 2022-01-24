@@ -453,8 +453,10 @@
 
       //총 주문금액 및 총 예상 결제 금액 표현 func
       function total_price(){
-            let sum = 0;
-            for(let i=1;i<testData.length;i++){
+         
+            let sum = 0;         
+            var cartLength = testData.length;
+            for(let i=1;i<cartLength;i++){
                var substr =  $("tbody tr:eq("+i+") >td:eq(4) span").text().replace(/,/g,""); // 총합 계산을 위하여 ',' 제거 하는 정규표현식 사용
                substr=substr.slice(0,-1); //뒤에 '원' 표시 제거
                substr = parseInt(substr); //정수형 변환
