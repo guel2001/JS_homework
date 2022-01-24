@@ -509,7 +509,7 @@
             html += '            <td class="g_dvr">3,000원</td>   ';
             html += '            <td class="g_ord">   ';
             html += '               <a href="#"><img src="../images/order/btn_order_s.gif" width="51" height="20" alt="주문하기" /></a>   ';
-            html += '            <a href="javascript:;" class="del" onclick="delItem()">삭제하기</a>   ';
+            html += '            <a href="javascript:;" class="del" onclick="delItem(this)">삭제하기</a>   ';
             html += '         </td>   ';
             html += '         </tr>   ';
 
@@ -526,7 +526,12 @@
 
       searchCartList();
 
-  
+         function delItem(e) {
+         document.querySelectorAll('.del').forEach( 
+              event.target.parentElement.parentElement.remove()
+         )
+      }
+
       $(document).ready(function () {        
 
          //품절처리 - TBODY 첫번재 목록 추출 (JQUERY 활용)
@@ -542,22 +547,14 @@
          });
 
          //상품삭제
-      function delItem() {
-         document.querySelectorAll('.del').forEach(
-
-               event.target.parentElement.parentElement.remove()
-
-         )
-
-
-      }
+     
          //총 주문금액 및 총 예상 결제 금액 표현 func
          function total_price(){
 
          let sum = 0;         
          var cartLength = testData.length;
          var sold_out_index = $("tbody tr:eq(0) >td:eq(3) input[name=qty]").val();
-         
+
          for(let i=0;i<cartLength;i++){            
            
             if( i ==sold_out_index){continue;} //수량이 0 인 것은 건너뜀
