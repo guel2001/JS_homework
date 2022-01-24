@@ -388,8 +388,7 @@
          이부분 부터 소스 구현.
       **/
 
-
-	  
+      
 
       var testData = [
          {
@@ -442,15 +441,33 @@
 	  function qtyTotal(element,index){
 
        if( index !=0){
-		 var qtyElement = element.parentNode.querySelector('input[name=qty]')
+		 let qtyElement = element.parentNode.querySelector('input[name=qty]')
 		 testData[index].qty = qtyElement.value;
        let change_qty = $("tbody tr:eq("+index+") >td:eq(4)");
        change_qty.html('<span>'+toCurrency(testData[index].price*qtyElement.value)+ '원' + '</span>');
 		 console.log(qtyElement.value);
+                
+
        }else console.log('sold out');
         
 	  };
 
+      //총 주문금액 및 총 예상 결제 금액 표현 func
+      function total_price(){
+            let sum = 0;
+            for(let i=1;i<testData.length;i++){
+               var substr =  $("tbody tr:eq("+i+") >td:eq(4) span").text().replace(/,/g,""); // 총합 계산을 위하여 ',' 제거 하는 정규표현식 사용
+               substr=substr.slice(0,-1); //뒤에 '원' 표시 제거
+               substr = parseInt(substr); //정수형 변환
+               sum +=substr;
+            }
+
+            console.log(sum);
+
+            $("tfoot #ord_amt").html(toCurrency(sum));
+            $("tfoot #total_amt").html(toCurrency(sum+6000));
+         
+      }
 
       function searchCartList() {
 
@@ -503,10 +520,10 @@
             html += '                        <input type="hidden" name="item_no" value="ABCDEFG1401201_ITEM_3" class="input" title="단품 코드" />   ';
             html += '                        <a href="javascript:;" onclick="qtyPlus(this);" class="plus"><img src="../images/goods/btn_cnt_up.gif" width="15" height="9" alt="수량증가" /></a>   ';
             html += '                        <a href="javascript:;" onclick="qtyMinus(this);" class="minus"><img src="../images/goods/btn_cnt_down.gif" width="15" height="9" alt="수량감소" /></a>   ';
-            html += '                        <a href="javascript:;" class="modi" onclick="qtyTotal(this,'+index+')"><img src="../images/order/btn_cnt_mod.gif" width="46" height="18" alt="변경" /></a>   ';
+            html += '                        <a href="javascript:;" class="modi" onclick="qtyTotal(this,'+index+');total_price();"><img src="../images/order/btn_cnt_mod.gif" width="46" height="18" alt="변경" /></a>   ';
             html += '               </p>   ';
             html += '            </td>   ';
-            html += '            <td class="g_prc"><span>' + toCurrency(cart.price*cart.qty) + '원' + '</span></td>   ';
+            html += '            <td class="g_prc"><span>' + toCurrency(cart.price*cart.qty)+ '원' + '</span></td>   ';
             html += '            <td class="g_dvr">3,000원</td>   ';
             html += '            <td class="g_ord">   ';
             html += '               <a href="#"><img src="../images/order/btn_order_s.gif" width="51" height="20" alt="주문하기" /></a>   ';
@@ -517,7 +534,7 @@
 
 
 
-         }
+         } 
 
 
          tBody.innerHTML = html;
@@ -527,20 +544,21 @@
 
       searchCartList();
 
-
-
-      $(document).ready(function () {
+  
+      $(document).ready(function () {        
 
          //품절처리 - TBODY 첫번재 목록 추출 (JQUERY 활용)
          $("tbody tr:eq(0) >td:eq(4) span").html("품절");
          $("tbody tr:eq(0) >td:eq(3) input[name=qty]").val(0).attr("disabled", true);
          $("tbody tr:eq(0) >td:eq(3) .plus").removeAttr('onclick')
          $("tbody tr:eq(0) >td:eq(3) .minus").removeAttr('onclick')
+        
+         total_price();
 
 
          });
 
-		
+     
          
    //]]>
    </script>
