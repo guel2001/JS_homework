@@ -433,8 +433,7 @@
          tr.remove();
          console.log("값 삭제전 : "+testData[index].price);
          testData.splice(index, 1);  //1 2 3  -  >  1 3 
-         console.log("값 삭제후 : "+testData[index].price);
-
+        
          searchCartList();
          total_price();
      
@@ -563,12 +562,15 @@
       
       function chk_delete(){   // 선택상품을 삭제
             
-            for(let i = 0 ; i <testData.length;i++){
-            let chk= $("tbody .checkbox"+i+"");
-            chk.prop('checked','true')
-
-             }
-      
+         console.log("chk");
+         var table_length = $("tbody tr").length;
+         for(let i = 0 ; i < table_length;i++){
+            if($("tbody tr:eq("+i+") .checkbox").is(":checked")){
+               console.log("zlzlzl");
+               rowDel(this,i);
+            }
+         }
+         
          }
 
       $(document).ready(function () {
