@@ -240,7 +240,7 @@
                   <input type="checkbox" name="sel_all" class="checkbox" id="sel_all_2" />
                   <label for="sel_all">전체선택</label>
                   <div class="btns">
-                     <a href="javascript:;"><img src="../images/order/btn_ord_del.gif" width="86" height="32"
+                     <a href="javascript:;" onclick = "chk_delete()"><img src="../images/order/btn_ord_del.gif" width="86" height="32"
                            alt="선택상품을 삭제" /></a>
                      <a href="#"><img src="../images/order/btn_ord_wish.gif" width="103" height="32"
                            alt="위시리스트 담기" /></a>
@@ -550,7 +550,26 @@
 
       }
 
+      function checkAll(obj){
+          var chk = $("input:checkbox[id="+obj+"]").is(":checked")
+          if(chk){
+             console.log('체크 success')
+             for(let i = 0 ; i<testData.length;i++){
+             $("tbody .checkbox").prop("checked",true);
+             }
+          }else $("tbody .checkbox").prop("checked",false);
+      }
 
+      
+      function chk_delete(){   // 선택상품을 삭제
+            
+            for(let i = 0 ; i <testData.length;i++){
+            let chk= $("tbody .checkbox"+i+"");
+            chk.prop('checked','true')
+
+             }
+      
+         }
 
       $(document).ready(function () {
          //품절처리 - TBODY 첫번재 목록 추출 (JQUERY 활용)
