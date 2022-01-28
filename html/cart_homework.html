@@ -240,8 +240,8 @@
                   <input type="checkbox" name="sel_all" class="checkbox" id="sel_all_2" />
                   <label for="sel_all">전체선택</label>
                   <div class="btns">
-                     <a href="javascript:;" onclick = "chk_delete()"><img src="../images/order/btn_ord_del.gif" width="86" height="32"
-                           alt="선택상품을 삭제" /></a>
+                     <a href="javascript:;" onclick="chk_delete()"><img src="../images/order/btn_ord_del.gif" width="86"
+                           height="32" alt="선택상품을 삭제" /></a>
                      <a href="#"><img src="../images/order/btn_ord_wish.gif" width="103" height="32"
                            alt="위시리스트 담기" /></a>
                      <a href="#"><img src="../images/order/btn_ord.gif" width="103" height="32" alt="주문하기" /></a>
@@ -431,14 +431,16 @@
       function rowDel(obj, index) {
          var tr = $(obj).parent().parent();
          tr.remove();
-         console.log("값 삭제전 : "+testData[index].price);
-         testData.splice(index, 1);  //1 2 3  -  >  1 3 
-        
+         testData.splice(index, 1);
+
+
+         
+
          searchCartList();
          total_price();
-     
+         set_soldout();
 
-           }
+      }
 
       //각각 품목 수량 주문금액 총합 표시
       function qtyTotal(element, index) {
@@ -476,8 +478,8 @@
 
             let cart = cartList[index];
 
-            if(cart.goods_no =='1000000000'){
-               cart.qty=0;
+            if (cart.goods_no == '1000000000') {
+               cart.qty = 0;
 
             }
 
@@ -502,7 +504,7 @@
             html += '               </td>   ';
             html += '               <td class="g_qty">   ';
             html += '                     <p class="qty">   ';
-            html += '                        <input type="text" name="qty" id="cnt3" value='+cart.qty+' class="input" title="상품수량입력" />   ';
+            html += '                        <input type="text" name="qty" id="cnt3" value=' + cart.qty + ' class="input" title="상품수량입력" />   ';
             html += '                        <input type="hidden" name="amt" value="358000" class="input" title="상품 가격" />   ';
             html += '                        <input type="hidden" name="deliver_amt" value="3000" class="input" title="배송비" />   ';
             html += '                        <input type="hidden" name="goods_code" value="ABCDEFG1401203" class="input" title="상품코드" />   ';
@@ -534,7 +536,7 @@
       function total_price() {
 
          var sum = 0;
-     
+
          for (let i = 0; i < testData.length; i++) {
             sum += (testData[i].qty * testData[i].price);
          }
@@ -549,52 +551,74 @@
 
       }
 
-      function checkAll(obj){
-          var chk = $("input:checkbox[id="+obj+"]").is(":checked")
-          if(chk){
-             console.log('체크 success')
-             for(let i = 0 ; i<testData.length;i++){
-             $("tbody .checkbox").prop("checked",true);
-             }
-          }else $("tbody .checkbox").prop("checked",false);
+      function checkAll(obj) {
+         var chk = $("input:checkbox[id=" + obj + "]").is(":checked")
+         if (chk) {
+            console.log('체크 success')
+            for (let i = 0; i < testData.length; i++) {
+               $("tbody .checkbox").prop("checked", true);
+            }
+         } else $("tbody .checkbox").prop("checked", false);
+      }
+
+
+      function chk_delete() {   // 선택상품을 삭제
+
+         console.log("chk");
+         //var table_length = $("tbody tr").length;
+
+         for (let i = 0; i < testData.length; i++) {
+            let each_chk=$("tbody tr:eq(" + i + ") .checkbox");
+            if (each_chk.is(":checked")) {
+               console.log("체크된 인덱스 : "+i); // ok
+               testData.splice(i, 1);
+           
+               var tr = $(this).parent().parent();
+               tr.remove();
+               
+            }  
+         //update        
+        
+     
+         }  
+          total_price();
+          searchCartList();
+          
+         set_soldout();
+         console.log(table_length+"<- 테이블길이");
+
+       
+     
+
       }
 
       
-      function chk_delete(){   // 선택상품을 삭제
-            
-         console.log("chk");
-         var table_length = $("tbody tr").length;
-         for(let i = 0 ; i < table_length;i++){
-            if($("tbody tr:eq("+i+") .checkbox").is(":checked")){
-               console.log("zlzlzl");
-               rowDel(this,i);
-            }
-         }
-         
-         }
-
       $(document).ready(function () {
          //품절처리 - TBODY 첫번재 목록 추출 (JQUERY 활용)
-         
+
+         set_soldout();
+         chk_delete()
+      });
+
+
+      function set_soldout(){
          let cartlist = testData;
          cartLength = cartlist.length
-         for(let i = 0 ; i < cartLength;i++){
-            if(testData[i].qty == 0){
+         for (let i = 0; i < cartLength; i++) {
+            if (testData[i].qty == 0) {
                console.log('chk');
-               let chk_soldout= $("tbody tr:eq("+i+") >td:eq(4) span");
+               let chk_soldout = $("tbody tr:eq(" + i + ") >td:eq(4) span");
+               $("tbody tr:eq(" + i + ") >td:eq(3) input[name=qty]").attr("disabled", true);
+               $("tbody tr:eq(" + i + ") >td:eq(3) .plus").removeAttr('onclick')
+               $("tbody tr:eq(" + i + ") >td:eq(3) .minus").removeAttr('onclick')
                chk_soldout.text('품절');
             }
          }
+      }
 
-         $("tbody tr:eq(0) >td:eq(3) input[name=qty]").attr("disabled", true);
-         $("tbody tr:eq(0) >td:eq(3) .plus").removeAttr('onclick')
-         $("tbody tr:eq(0) >td:eq(3) .minus").removeAttr('onclick')
-        
-             
-      });
-            searchCartList();
-            total_price();
- 
+      searchCartList();
+      total_price();
+
 
    </script>
 </body>
