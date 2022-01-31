@@ -345,7 +345,6 @@
        */
       function qtyPlus(element,index) {
 
-
          var qtyElement= $("tbody tr:eq(" + index + ") >td:eq(3) input[name=qty]")
          var qtyValue = Number(qtyElement.val());
 
@@ -493,8 +492,6 @@
             html += '         </tr>   ';
 
 
-
-
          }
 
         // tBody(.innerHTML = html;)
@@ -532,7 +529,6 @@
 
       }
 
-
       //총 주문금액 및 총 예상 결제 금액 표현 func
       function total_price() {
 
@@ -544,8 +540,6 @@
 
          $("tfoot #ord_amt").html(toCurrency(sum));
          $("tfoot #total_amt").html(toCurrency(sum + 6000));
-
-
 
       }
 
@@ -572,7 +566,6 @@
               
               var chk=$("[name='"+e+"']:checked").eq(i).closest("tr"); //0,1
             
-
               var qty = chk.find(":input[name='qty']").val();
               var amt = chk.find(":input[name='amt']").val();
               var deliver_amt =chk.find(":input[name='deliver_amt']").val();
@@ -612,8 +605,7 @@
                    
                   if(testData[j].goods_no == chk_qty_no.val()){
                        testData.splice(j, 1);
-                    }
-                    
+                    }                    
                   
                  }                    
               }
@@ -624,11 +616,7 @@
            searchCartList();
            set_soldout();
 
-      }
-
-
-      
-
+      }     
 
       //품절처리
       function set_soldout() {

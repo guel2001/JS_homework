@@ -347,14 +347,10 @@
          var qtyElement = element.parentNode.querySelector('input[name=qty]')
          var qtyValue = Number(qtyElement.value);
 
-
          if (qtyValue > 29) { return alert("최대 수량입니다."); }
-
-
 
          qtyValue++;
          qtyElement.value = qtyValue;
-
 
          console.log('qtyPlus', element);
          console.log('qtyElement', qtyElement);
@@ -371,7 +367,6 @@
 
          qtyValue--;
          qtyElement.value = qtyValue;
-
 
          console.log('qtyMinus', element);
          console.log('qtyElement', qtyElement);
@@ -494,8 +489,6 @@
             html += '         </tr>   ';
 
 
-
-
          }
 
          tBody.innerHTML = html;
@@ -545,8 +538,6 @@
          document.querySelector("tfoot #ord_amt").innerHTML = toCurrency(sum);
          document.querySelector("tfoot #total_amt").innerHTML = toCurrency(sum+6000);
 
-
-
       }
 
       //전체선택
@@ -564,8 +555,7 @@
                chkbox[i].checked = false
             }
          }
-      }
-      
+      }      
  
       //주문하기 버튼을 눌렀을시 발생하는 이벤트
       function final_order(e){
@@ -651,9 +641,7 @@
            searchCartList();
            set_soldout();
 
-      }
-
-      ;      
+      }          
      
       //품절처리
       function set_soldout() {
