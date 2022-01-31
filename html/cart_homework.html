@@ -244,7 +244,7 @@
                            height="32" alt="선택상품을 삭제" /></a>
                      <a href="#"><img src="../images/order/btn_ord_wish.gif" width="103" height="32"
                            alt="위시리스트 담기" /></a>
-                     <a href="#"><img src="../images/order/btn_ord.gif" width="103" height="32" alt="주문하기" /></a>
+                     <a href="javascript:;" onclick="final_order('choice_prd')" ><img src="../images/order/btn_ord.gif" width="103" height="32" alt="주문하기" /></a>
                      <a href="#"><img src="../images/order/btn_ord_all.gif" width="103" height="32" alt="전체 주문하기" /></a>
                   </div>
                </div>
@@ -399,6 +399,7 @@
                item_qty: '1'
             }]
          },
+         
          {
             goods_img: '../images/goods/img_50.jpg',
             goods_no: '1000000001',
@@ -448,10 +449,10 @@
          if (so != 0) {
             let qtyElement = element.parentNode.querySelector('input[name=qty]')
             testData[index].qty = qtyElement.value;
-            console.log("qtyelement.value : " + qtyElement.value);
+           
             let change_qty = $("tbody tr:eq(" + index + ") >td:eq(4)");
             change_qty.html('<span>' + toCurrency(testData[index].price * qtyElement.value) + '원' + '</span>');
-            console.log(qtyElement.value);
+            
          }
 
       }
@@ -539,9 +540,6 @@
             sum += (testData[i].qty * testData[i].price);
          }
 
-
-         console.log('총 합 : ' + sum);
-
          $("tfoot #ord_amt").html(toCurrency(sum));
          $("tfoot #total_amt").html(toCurrency(sum + 6000));
 
@@ -552,35 +550,62 @@
       function checkAll(obj) {
          var chk = $("input:checkbox[id=" + obj + "]").is(":checked")
          if (chk) {
-            console.log('체크 success')
+           
             for (let i = 0; i < testData.length; i++) {
                $("tbody .checkbox").prop("checked", true);
             }
          } else $("tbody .checkbox").prop("checked", false);
       }
 
+      function final_order(e){
 
-      function chk_delete(choice_prd) {   // 선택상품을 삭제
-
-         console.log("chk");
-         // var table_row = $("tbody tr");
-         // var table_length = $("tbody tr").length;
-
-         if($("input[name="+choice_prd+"]").is(":checked")){         
+         let chk_sum=0;
+         console.log("[ ");
+         if($("input[name="+e+"]").is(":checked")){         
             
-             for(var i=$("[name='"+choice_prd+"']:checked").length-1; i>-1; i--){ // 2
+            for(var i=$("[name='"+e+"']:checked").length-1; i>-1; i--){ // 2
+              
+              var chk=$("[name='"+e+"']:checked").eq(i).closest("tr"); //0,1
+            
+
+              var qty = chk.find(":input[name='qty']").val();
+              var amt = chk.find(":input[name='amt']").val();
+              var deliver_amt =chk.find(":input[name='deliver_amt']").val();
+              var goods_code = chk.find(":input[name='goods_code']").val();
+              var item_no = chk.find(":input[name='item_no']").val();
+
+              console.log("{ qty : "+qty);
+              console.log("  amt : "+amt);
+              console.log("  deliver_amt : "+deliver_amt);
+              console.log("  goods_code : "+goods_code);
+              console.log("  item_no : "+item_no+ " },");
                
-               var chk=$("[name='"+choice_prd+"']:checked").eq(i).closest("tr"); //0,1
+              number_amt = amt.replace(",","");
+              chk_sum += Number(qty)*Number(number_amt);
+             }
+                       
+         }
+
+         console.log(" ]")
+         console.log("총 예상 결제금액 : "+toCurrency(chk_sum+6000)+"원");
+
+      }
+
+      function chk_delete(e) {   // 선택상품을 삭제
+
+      
+         if($("input[name="+e+"]").is(":checked")){         
+            
+             for(var i=$("[name='"+e+"']:checked").length-1; i>-1; i--){ // 2
+               
+               var chk=$("[name='"+e+"']:checked").eq(i).closest("tr"); //0,1
                var chk_qty_no=chk.find(":input[name='goods_code']");
-               console.log(chk_qty_no.val());  
-         
+           
                chk.remove();
 
                 for(var j = 0 ; j < testData.length;j++){
                    
                   if(testData[j].goods_no == chk_qty_no.val()){
-
-                      console.log('index : '+j); 
                        testData.splice(j, 1);
                     }
                     
@@ -593,24 +618,6 @@
            total_price();
            searchCartList();
            set_soldout();
-
-         // for (let i = 0; i < table_length; i++) {
-         //    let each_chk = $("tbody tr:eq(" + i + ") .checkbox");
-         //    if (each_chk.is(":checked")) {
-         //       console.log("체크된 인덱스 : " + i); // ok
-            
-         //        testData.splice(i, 1);
-         //        var tr = $(this).parent().parent();
-         //        tr.remove();
-           
-      
-         //    }
-
-         // }
-         // total_price();
-         // searchCartList();
-         // set_soldout();
-    
 
       }
 
@@ -627,7 +634,7 @@
          cartLength = cartlist.length
          for (let i = 0; i < cartLength; i++) {
             if (testData[i].qty == 0) {
-               console.log('chk');
+               
                let chk_soldout = $("tbody tr:eq(" + i + ") >td:eq(4) span");
                $("tbody tr:eq(" + i + ") >td:eq(3) input[name=qty]").attr("disabled", true);
                $("tbody tr:eq(" + i + ") >td:eq(3) .plus").removeAttr('onclick')
