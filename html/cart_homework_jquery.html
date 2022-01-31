@@ -484,7 +484,7 @@
             html += '               </p>   ';
             html += '            </td>   ';
             html += '            <td class="g_prc"><span>' + toCurrency(cart.price * cart.qty) + '원' + '</span></td>   ';
-            html += '            <td class="g_dvr">3,000원</td>   ';
+            html += '            <td class="g_dvr">' + toCurrency(cart.deliver_amt) + '원' + '</td>   ';
             html += '            <td class="g_ord">   ';
             html += '               <a href="#"><img src="../images/order/btn_order_s.gif" width="51" height="20" alt="주문하기" /></a>   ';
             html += '            <a href="javascript:;" class="del" onclick="rowDel(this,' + index + ')">삭제하기</a>   ';
@@ -533,14 +533,16 @@
       function total_price() {
 
          var sum = 0;
-
+         var deliver_sum = 0;
          for (let i = 0; i < testData.length; i++) {
             sum += (testData[i].qty * testData[i].price);
+            deliver_sum +=(testData[i].deliver_amt);
          }
 
+         $("tfoot #deliver_total_amt").html(toCurrency(deliver_sum));
          $("tfoot #ord_amt").html(toCurrency(sum));
-         $("tfoot #total_amt").html(toCurrency(sum + 6000));
-
+         $("tfoot #total_amt").html(toCurrency(sum+deliver_sum));
+        
       }
 
       //전체선택
@@ -559,6 +561,8 @@
       function final_order(e){
 
          let chk_sum=0;
+         let deliver_sum=0;
+
          console.log("[ ");
          if($("input[name="+e+"]").is(":checked")){         
             
@@ -580,12 +584,14 @@
                
               number_amt = amt.replace(",","");
               chk_sum += Number(qty)*Number(number_amt);
+              deliver_sum += Number(deliver_amt); 
+              
              }
                        
          }
 
          console.log(" ]")
-         console.log("총 예상 결제금액 : "+toCurrency(chk_sum+6000)+"원"); //배송비 포함한 예상 결제금액 출력
+         console.log("총 예상 결제금액 : "+toCurrency(chk_sum+deliver_sum)+"원"); //배송비 포함한 예상 결제금액 출력
 
       }
 
