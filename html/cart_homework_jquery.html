@@ -444,9 +444,9 @@
       //각각 품목 수량 주문금액 총합 표시
       function qtyTotal(element, index) {
 
-         var so = $("tbody tr:eq(" + index + ") >td:eq(3) input[name=qty]").val();
+         var chk_qty = $("tbody tr:eq(" + index + ") >td:eq(3) input[name=qty]").val();
          
-         if (so != 0) {
+         if (chk_qty != 0) {
             let qtyElement = element.parentNode.querySelector('input[name=qty]')
             testData[index].qty = qtyElement.value;
            

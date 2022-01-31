@@ -519,9 +519,9 @@
       //각각 품목 수량 주문금액 총합 표시
       function qtyTotal(element, index) {
          var tBody= document.querySelectorAll("tbody tr")[index];
-         var so = tBody.querySelector("#cnt3").value;
+         var chk_qty = tBody.querySelector("#cnt3").value; //qty_soldout 일경우 체크
          
-         if (so != 0) {
+         if (chk_qty != 0) {
             let qtyElement = element.parentNode.querySelector('input[name=qty]')
             testData[index].qty = qtyElement.value;
            
@@ -553,7 +553,6 @@
       function checkAll(obj) {
      
          var chk  =  document.querySelector("#sel_all_1").checked;
-         console.log(chk);
          var chkbox =  document.querySelectorAll("tbody .checkbox");
          if (chk) {
            
@@ -573,14 +572,14 @@
 
          let chk_sum=0;
          console.log("[ ");
-
-         let any_chk=false; 
+         
+         let any_chk=false;                           
          var chk = document.querySelectorAll("input[name="+e+"]");
          let chk_length =0; //선택된 체크박스 개수
 
          for(let a = 0 ; a < chk.length;a++){
-            if(chk[a].checked ==true){
-               any_chk=true;
+            if(chk[a].checked ==true){ 
+               any_chk=true;                 //체크박스가 선택되었는지 CHECK
             } 
             if(chk[a].checked){chk_length++;}
          } 
@@ -629,9 +628,9 @@
 
           if(any_chk){         
          
-              for(var i=chk_length-1; i>-1; i--){ // 2
+              for(var i=chk_length-1; i>-1; i--){ 
                 
-           
+                  //체크된 행을 찾는다 (closet 이용)
                   var find_chk_row = document.querySelectorAll("[name='"+e+"']:checked")[i].closest("tr");
                   var chk_qty_no = find_chk_row.querySelector("input[name='goods_code']");
                   find_chk_row.removeChild(chk_qty_no.parentElement.parentElement);
