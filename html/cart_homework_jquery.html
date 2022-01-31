@@ -428,34 +428,7 @@
          }
       ];
 
-      //삭제 
-      function rowDel(obj, index) {
-         var tr = $(obj).parent().parent();
-         tr.remove();
-         testData.splice(index, 1);
-
-
-         searchCartList();
-         total_price();
-         set_soldout();
-
-      }
-
-      //각각 품목 수량 주문금액 총합 표시
-      function qtyTotal(element, index) {
-
-         var chk_qty = $("tbody tr:eq(" + index + ") >td:eq(3) input[name=qty]").val();
-         
-         if (chk_qty != 0) {
-            let qtyElement = element.parentNode.querySelector('input[name=qty]')
-            testData[index].qty = qtyElement.value;
-           
-            let change_qty = $("tbody tr:eq(" + index + ") >td:eq(4)");
-            change_qty.html('<span>' + toCurrency(testData[index].price * qtyElement.value) + '원' + '</span>');
-            
-         }
-
-      }
+      
       function searchCartList() {
 
          // START ajax를 이용하여 데이터를 가져왔다고 가정한다.
@@ -531,6 +504,37 @@
          tBody.html(html);
       }
 
+  
+      //삭제하기 버튼
+      function rowDel(obj, index) {
+         var tr = $(obj).parent().parent();
+         tr.remove();
+         testData.splice(index, 1);
+
+
+         searchCartList();
+         total_price();
+         set_soldout();
+
+      }
+
+
+      //각각 품목 수량 주문금액 총합 표시
+      function qtyTotal(element, index) {
+
+         var chk_qty = $("tbody tr:eq(" + index + ") >td:eq(3) input[name=qty]").val();
+         
+         if (chk_qty != 0) {
+            let qtyElement = element.parentNode.querySelector('input[name=qty]')
+            testData[index].qty = qtyElement.value;
+           
+            let change_qty = $("tbody tr:eq(" + index + ") >td:eq(4)");
+            change_qty.html('<span>' + toCurrency(testData[index].price * qtyElement.value) + '원' + '</span>');
+            
+         }
+
+      }
+
 
       //총 주문금액 및 총 예상 결제 금액 표현 func
       function total_price() {
@@ -548,6 +552,7 @@
 
       }
 
+      //전체선택
       function checkAll(obj) {
          var chk = $("input:checkbox[id=" + obj + "]").is(":checked")
          if (chk) {
@@ -558,6 +563,8 @@
          } else $("tbody .checkbox").prop("checked", false);
       }
 
+
+      //주문하기를 눌렀을 때 발생하는 이벤트 
       function final_order(e){
 
          let chk_sum=0;
@@ -588,7 +595,7 @@
          }
 
          console.log(" ]")
-         console.log("총 예상 결제금액 : "+toCurrency(chk_sum+6000)+"원");
+         console.log("총 예상 결제금액 : "+toCurrency(chk_sum+6000)+"원"); //배송비 포함한 예상 결제금액 출력
 
       }
 
@@ -623,13 +630,10 @@
       }
 
 
-      $(document).ready(function () {
-         //품절처리 - TBODY 첫번재 목록 추출 (JQUERY 활용)
-         set_soldout();
-         chk_delete()
-      });
+      
 
 
+      //품절처리
       function set_soldout() {
          let cartlist = testData;
          cartLength = cartlist.length
@@ -648,6 +652,11 @@
       searchCartList();
       total_price();
 
+      $(document).ready(function () {
+     
+         set_soldout();
+         chk_delete()
+      });
 
    </script>
 </body>

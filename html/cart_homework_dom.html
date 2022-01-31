@@ -273,7 +273,6 @@
    <!-- //CONTAINER -->
 
 
-
    <!-- FOOTER -->
    <div id="footer" class="footer">
       <div class="foot">
@@ -503,7 +502,7 @@
 
       }
 
-      //삭제 
+      //삭제하기 버튼
       function rowDel(obj, index) {
         
          var tr = document.querySelector("#tbl_cart_list > tbody");
@@ -519,7 +518,7 @@
       //각각 품목 수량 주문금액 총합 표시
       function qtyTotal(element, index) {
          var tBody= document.querySelectorAll("tbody tr")[index];
-         var chk_qty = tBody.querySelector("#cnt3").value; //qty_soldout 일경우 체크
+         var chk_qty = tBody.querySelector("#cnt3").value; //qty_soldout 일 경우 체크
          
          if (chk_qty != 0) {
             let qtyElement = element.parentNode.querySelector('input[name=qty]')
@@ -550,6 +549,7 @@
 
       }
 
+      //전체선택
       function checkAll(obj) {
      
          var chk  =  document.querySelector("#sel_all_1").checked;
@@ -567,7 +567,7 @@
       }
       
  
-       
+      //주문하기 버튼을 눌렀을시 발생하는 이벤트
       function final_order(e){
 
          let chk_sum=0;
@@ -584,7 +584,7 @@
             if(chk[a].checked){chk_length++;}
          } 
 
-         if(any_chk){
+         if(any_chk){ //체크박스가 선택되었을 경우
             for(var i=chk_length-1; i>-1; i--){
                
                var chk = document.querySelectorAll("[name='"+e+"']:checked")[i].closest("tr");
@@ -613,7 +613,8 @@
 
       }
 
-      function chk_delete(e) {   // 선택상품을 삭제
+      // 선택상품을 삭제
+      function chk_delete(e) {   
 
          let any_chk=false; 
          var chk = document.querySelectorAll("input[name="+e+"]");
@@ -652,13 +653,9 @@
 
       }
 
-      document.addEventListener("DOMContentLoaded",function(){
-         //품절처리 - TBODY 첫번재 목록 추출
-         set_soldout();
-         chk_delete()
-      });      
+      ;      
      
-
+      //품절처리
       function set_soldout() {
          let cartlist = testData;
          cartLength = cartlist.length
@@ -692,6 +689,12 @@
       searchCartList();
       total_price();
 
+
+      document.addEventListener("DOMContentLoaded",function(){
+            
+               set_soldout();
+               chk_delete()
+            })
 
    </script>
 </body>
